@@ -1,5 +1,8 @@
 const express = require('express');
-const { contactAddSchema } = require('../../models');
+const {
+  contactAddSchema,
+  updateFavoriteStatusSchema,
+} = require('../../models');
 const { ctrlWrapper, validation } = require('../../middlewares');
 const { contacts: ctrl } = require('../../controllers');
 
@@ -17,6 +20,12 @@ router.put(
   '/:contactId',
   validation(contactAddSchema),
   ctrlWrapper(ctrl.updateContact)
+);
+
+router.patch(
+  '/:contactId/favorite',
+  validation(updateFavoriteStatusSchema),
+  ctrlWrapper(ctrl.updateFavoriteStatus)
 );
 
 module.exports = router;

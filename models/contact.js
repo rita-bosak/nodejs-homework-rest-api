@@ -25,9 +25,13 @@ const contactAddSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().required(),
   phone: Joi.string().required(),
-  favourite: Joi.bool(),
+  favorite: Joi.bool(),
+});
+
+const updateFavoriteStatusSchema = Joi.object({
+  favorite: Joi.bool().required(),
 });
 
 const Contact = model('contact', contactSchema);
 
-module.exports = { Contact, contactAddSchema };
+module.exports = { Contact, contactAddSchema, updateFavoriteStatusSchema };
