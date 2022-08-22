@@ -3,27 +3,34 @@ const {
   contactAddSchema,
   updateFavoriteStatusSchema,
 } = require('../../models');
-const { ctrlWrapper, validation } = require('../../middlewares');
+const { auth, ctrlWrapper, validation } = require('../../middlewares');
 const { contacts: ctrl } = require('../../controllers');
 
 const router = express.Router();
 
-router.get('/', ctrlWrapper(ctrl.listContacts));
+router.get('/', auth, ctrlWrapper(ctrl.listContacts));
 
-router.get('/:contactId', ctrlWrapper(ctrl.getContactById));
+router.get('/:contactId', auth, ctrlWrapper(ctrl.getContactById));
 
-router.post('/', validation(contactAddSchema), ctrlWrapper(ctrl.addContact));
+router.post(
+  '/',
+  auth,
+  validation(contactAddSchema),
+  ctrlWrapper(ctrl.addContact)
+);
 
-router.delete('/:contactId', ctrlWrapper(ctrl.removeContact));
+router.delete('/:contactId', auth, ctrlWrapper(ctrl.removeContact));
 
 router.put(
   '/:contactId',
+  auth,
   validation(contactAddSchema),
   ctrlWrapper(ctrl.updateContact)
 );
 
 router.patch(
   '/:contactId/favorite',
+  auth,
   validation(updateFavoriteStatusSchema),
   ctrlWrapper(ctrl.updateFavoriteStatus)
 );
