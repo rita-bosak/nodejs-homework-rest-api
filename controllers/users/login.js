@@ -1,7 +1,9 @@
-const { User } = require('../../models');
 const bcryptjs = require('bcryptjs');
+const { User } = require('../../models');
 
 const { createError } = require('../../helpers');
+
+const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -16,12 +18,16 @@ const login = async (req, res) => {
     throw createError(401, 'Email or password is wrong');
   }
 
-  const result = await User.create({ email, password: hashPassword });
-  const { subscription } = result;
+  const payload = {
+    id: user._id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+
   res.status(201).json({
     status: 'success',
     code: 201,
-    user: { email, subscription },
+    data: { token },
   });
 };
 
